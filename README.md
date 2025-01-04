@@ -29,6 +29,9 @@ This is a **game eCommerce frontend app** built with **React**, **Redux**, **Tai
    npm install
    npm run dev
 
+## Url / Address
+Feel free to open the [arkade](https://arkade101.netlify.app)
+
 ## Usage
 - **Browse Games**: On the home page, view the available games. Use the search bar, filters, and sorting to find specific games.
 - **Login/Signup**: Create a user account or log in. This will store your user session in localStorage.
