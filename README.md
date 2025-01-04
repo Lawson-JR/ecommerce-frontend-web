@@ -21,12 +21,12 @@ This is a **game eCommerce frontend app** built with **React**, **Redux**, **Tai
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Lawson-JR/portfolio_project.git
-   cd portfolio_project
+   git clone https://github.com/Lawson-JR/ecommerce-frontend-web.git
+   cd ecommerce-frontend-web
    
 2. Run the application:
    ```bash
-   cd eCommerce\ Frontend\ Web/
+   npm install
    npm run dev
 
 ## Usage
