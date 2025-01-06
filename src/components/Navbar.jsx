@@ -63,6 +63,7 @@ const Navbar = () => {
             setTimeout(() => {
                 navigate('/'); // Navigate to home page
             }, 50);
+            window.location.reload();
         }
     };
 

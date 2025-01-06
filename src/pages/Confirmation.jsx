@@ -1,50 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { clearCart } from '../redux/cartSlice';
+import { useForm } from "@formspree/react";
 import { useDispatch } from "react-redux";
+import { clearCart } from "../redux/cartSlice";
 
 const Confirmation = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const navigate = useNavigate(); // To handle redirection
+    const navigate = useNavigate();
 
-    // Extract the cart and form data from location state
-    const { formData, cartItems = [], totalQuantity = 0, totalAmount = 0, ...otherDetails } = location.state || {};
+    const { formData, cartItems = [], totalQuantity = 0, totalAmount = 0 } = location.state || {};
 
-    // Calculate shipping cost (e.g., $5 per item)
-    const shippingCost = totalQuantity ? totalQuantity * 5 : 0;
-    const grandTotal = totalAmount + shippingCost;
-
-    // State to manage modal visibility
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [state, handleSubmit] = useForm("mdkonkdl"); // Replace with your Formspree project ID
+    const [email, setEmail] = useState("");
+
+    const shippingCost = totalQuantity * 5;
+    const grandTotal = totalAmount + shippingCost;
+
+    useEffect(() => {
+        // Fetch user email from localStorage
+        const currentUser = localStorage.getItem("currentUser");
+        if (currentUser) {
+            try {
+                const parsedUser = JSON.parse(currentUser);
+                if (parsedUser.email) {
+                    setEmail(parsedUser.email);
+                }
+            } catch (error) {
+                console.error("Error parsing currentUser from localStorage:", error);
+            }
+        }
+    }, []);
+
     const saveOrder = (orderDetails) => {
-        // Add date logic
-        const orderDate = new Date(); // Current date
+        const orderDate = new Date();
         const deliveryDate = new Date(orderDate);
-        deliveryDate.setDate(orderDate.getDate() + 7); // Add 7 days
-    
+        deliveryDate.setDate(orderDate.getDate() + 7);
+
         const enrichedOrderDetails = {
             ...orderDetails,
-            date: orderDate.toISOString(), // Save as ISO string
+            date: orderDate.toISOString(),
             deliveryDate: deliveryDate.toISOString(),
         };
-    
-        // Check if the user is logged in
+
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    
+
         if (currentUser) {
-            // Logic for logged-in users
             const usersList = JSON.parse(localStorage.getItem("users")) || [];
             const userIndex = usersList.findIndex(user => user.email === currentUser.email);
-    
+
             if (userIndex !== -1) {
                 const userOrders = usersList[userIndex].orders || [];
                 usersList[userIndex].orders = [...userOrders, enrichedOrderDetails];
                 localStorage.setItem("users", JSON.stringify(usersList));
             }
         } else {
-            // Logic for guest users
             const tempOrders = JSON.parse(localStorage.getItem("tempOrder")) || [];
             localStorage.setItem("tempOrder", JSON.stringify([...tempOrders, enrichedOrderDetails]));
         }
@@ -60,35 +72,50 @@ const Confirmation = () => {
         };
 
         saveOrder(orderDetails);
-        setIsModalOpen(true); // Show the success modal
+
+        // Prepare email details
+        const emailMessage = `
+            Order Confirmation
+            -------------------
+            Name: ${formData?.firstName} ${formData?.lastName}
+            Email: ${email}
+            Total Quantity: ${totalQuantity}
+            Grand Total: $${grandTotal.toFixed(2)}
+
+            Shipping Address:
+            ${formData?.address}, ${formData?.city}, ${formData?.state}, ${formData?.zip}
+        `;
+
+        handleSubmit({
+            email,
+            message: emailMessage,
+        });
+
+        setIsModalOpen(true);
         dispatch(clearCart());
     };
 
+    if (state.succeeded) {
+        console.log("Email sent successfully!");
+    }
 
     return (
         <div className="font-bahnschrift min-h-screen flex items-center justify-center bg-gray-700 p-8">
-            <div className="bg-gray-800 text-gray-300 p-8 rounded-lg shadow-2xl max-w-4xl w-full animate-fade-in">
+            <div className="bg-gray-800 text-gray-300 p-8 rounded-lg shadow-2xl max-w-4xl w-full">
                 {cartItems.length === 0 ? (
                     <div className="text-center text-lg text-red-500 py-8">
                         No details found
                     </div>
                 ) : (
                     <>
-                        {/* Order Confirmation Section */}
                         <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
                             <h2 className="text-3xl font-bold text-blue-400">Order Confirmation</h2>
-                            <div className="flex items-center">
-                                <div className="mr-4">
-                                    <span className="text-lg mr-4 text-gray-300">Grand Total:</span>
-                                    <span className="text-green-500 text-xl font-extrabold">${grandTotal.toFixed(2)}</span>
-                                </div>
-                                <button
-                                    onClick={handleOrder}
-                                    className="px-4 py-2.5 bg-green-600 text-gray-300 rounded-lg hover:bg-green-700 transition ease-in-out duration-300"
-                                >
-                                    Place Order
-                                </button>
-                            </div>
+                            <button
+                                onClick={handleOrder}
+                                className="px-4 py-2.5 bg-green-600 text-gray-300 rounded-lg hover:bg-green-700 transition duration-300"
+                            >
+                                Place Order
+                            </button>
                         </div>
 
                         {/* Information Grid */}
@@ -160,7 +187,6 @@ const Confirmation = () => {
                     </>
                 )}
             </div>
-
             {/* Success Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -168,15 +194,14 @@ const Confirmation = () => {
                         <h2 className="text-2xl font-bold text-green-600 mb-4">Order Successful!</h2>
                         <p className="text-gray-400 mb-4">Your order has been successfully placed! We appreciate your business and can’t wait for you to enjoy your purchase!</p>
                         <div className="flex justify-between mt-5">
-                            <Link to="/hive">
-                                <button
-                                    className="px-4 py-2.5 bg-blue-600 text-gray-300 rounded-lg hover:bg-blue-700 transition ease-in-out duration-300"
-                                >
-                                    Continue Shopping
-                                </button>
-                            </Link>
                             <button
-                                onClick={() => navigate('/trackOrder')} // Redirect to homepage
+                                onClick={() => (window.location.href = "/hive")}
+                                className="px-4 py-2.5 bg-blue-600 text-gray-300 rounded-lg hover:bg-blue-700 transition ease-in-out duration-300"
+                            >
+                                Continue Shopping
+                            </button>
+                            <button
+                                onClick={() => (window.location.href = "/trackOrder")}
                                 className="px-4 py-2.5 bg-red-600 text-gray-300 rounded-lg hover:bg-red-700 transition ease-in-out duration-300"
                             >
                                 Track Order

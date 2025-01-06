@@ -55,12 +55,22 @@ const Checkout = () => {
     // Fetch the current user's email (from localStorage or Redux)
     const [userEmail, setUserEmail] = useState('');
     useEffect(() => {
-        const currentUserEmail = localStorage.getItem("currentUserEmail"); // Assuming you store email here
-        setUserEmail(currentUserEmail || '');
-    }, []);
+        const currentUser = localStorage.getItem("currentUser");
+        if (currentUser) {
+            try {
+                const parsedUser = JSON.parse(currentUser);
+                if (parsedUser.email) {
+                    setUserEmail(parsedUser.email);
+                    setFormData((prevFormData) => ({ ...prevFormData, email: parsedUser.email }));
+                }
+            } catch (error) {
+                console.error("Error parsing currentUser from localStorage:", error);
+            }
+        }
+    }, []);    
 
     const [formData, setFormData] = useState({
-        email: userEmail,
+        email: '',
         phone: '+234',
         firstName: '',
         lastName: '',
@@ -259,7 +269,7 @@ const Checkout = () => {
                                     required
                                 />
                                 <label htmlFor="agreeToTerms" className="ml-2">
-                                    Please note that we only accept Cash on Delivery (COD) as a payment method. By proceeding, you confirm that you agree to our Terms and Conditions.
+                                    Please note that we only accept Cash on Delivery (COD) as a payment method. By proceeding, you confirm that you agree to our<a href="/terms" target='_blank' className='text-indigo-500 hover:underline ml-1'>terms and conditions</a>.
                                 </label>
                             </div>
 
