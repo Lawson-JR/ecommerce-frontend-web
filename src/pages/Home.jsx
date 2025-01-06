@@ -65,7 +65,7 @@ const Home = () => {
 
             <div className="container mx-auto py-6 flex flex-col md:flex-row md:space-x-6">
                 {/* Sidebar for game categories */}
-                <div className="w-full md:w-3/12">
+                <div className="w-full md:w-3/12 mb-3">
                     <div className="bg-indigo-600 text-white text-sm md:text-base font-bold px-2 py-2.5" style={{
                         borderTopRightRadius: "3px",
                         borderTopLeftRadius: "3px"
