@@ -55,6 +55,7 @@ const LogIn = ({ setUserName, setIsModalOpen }) => {
         // Navigate to profile and close modal
         closeModal();
         navigate('/profile');
+        window.location.reload()
     };
 
     const handleSwitchToLogin = () => {
