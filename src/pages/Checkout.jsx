@@ -50,10 +50,8 @@ const Checkout = () => {
     const totalQuantity = useSelector(selectTotalQuantity);
     const navigate = useNavigate();
     const [error, setError] = useState('');
-    const today = new Date().toISOString().split("T")[0];
-    
-    // Fetch the current user's email (from localStorage or Redux)
     const [userEmail, setUserEmail] = useState('');
+        
     useEffect(() => {
         const currentUser = localStorage.getItem("currentUser");
         if (currentUser) {
@@ -61,7 +59,12 @@ const Checkout = () => {
                 const parsedUser = JSON.parse(currentUser);
                 if (parsedUser.email) {
                     setUserEmail(parsedUser.email);
-                    setFormData((prevFormData) => ({ ...prevFormData, email: parsedUser.email }));
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        email: parsedUser.email,
+                        firstName: parsedUser.firstName || '', // Add firstName
+                        lastName: parsedUser.lastName || '', // Add lastName
+                    }));
                 }
             } catch (error) {
                 console.error("Error parsing currentUser from localStorage:", error);

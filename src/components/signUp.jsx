@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 const SignUp = ({ onSwitchToLogin }) => {
     const [formData, setFormData] = useState({
         username: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
-        agreeToTerms: false
-    });
+        agreeToTerms: false,
+    });    
 
     const [errors, setErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -23,6 +25,8 @@ const SignUp = ({ onSwitchToLogin }) => {
     const validateForm = () => {
         const newErrors = {};
         if (!formData.username) newErrors.username = 'Username is required';
+        if (!formData.firstName) newErrors.firstName = 'First name is required';
+        if (!formData.lastName) newErrors.lastName = 'Last name is required';
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else {
@@ -50,10 +54,12 @@ const SignUp = ({ onSwitchToLogin }) => {
         // Create new user object with openedDate
         const newUser = {
             username: formData.username,
+            firstName: formData.firstName, // Add firstName
+            lastName: formData.lastName,   // Add lastName
             email: formData.email,
             password: formData.password,
             openedDate: new Date().toISOString() // Set openedDate to current date
-        };
+        };        
 
         // Retrieve existing users from local storage or initialize an empty array
         const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
@@ -107,10 +113,10 @@ const SignUp = ({ onSwitchToLogin }) => {
                 </p>
             ) : (
                 <div>
-                    <h2 className="text-2xl font-bold mb-4 text-center text-indigo-400">Create Account</h2>
+                    <h2 className="text-2xl font-bold mb-3 text-center text-indigo-400">Create Account</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Username */}
-                        <div className="relative pb-2">
+                        <div className="relative">
                             <label className="block text-gray-300 mb-1" htmlFor="username">Username</label>
                             <input
                                 type="text"
@@ -127,8 +133,47 @@ const SignUp = ({ onSwitchToLogin }) => {
                             {errors.username && <span className="block text-red-500 text-sm absolute -bottom-3">{errors.username}</span>}
                         </div>
 
+                        {/* First Name and Last Name */}
+                        <div className="flex gap-3">
+                            {/* First Name */}
+                            <div className="relative flex-1">
+                                <label className="block text-gray-300 mb-1" htmlFor="firstName">First Name</label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    id="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    className={`w-full px-3 py-2 bg-gray-700 text-gray-100 outline-0 border ${
+                                        errors.firstName ? 'border-red-500' : 'border-gray-600'
+                                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-300 shadow-sm`}
+                                    placeholder="First Name"
+                                    required
+                                />
+                                {errors.firstName && <span className="block text-red-500 text-sm absolute -bottom-3">{errors.firstName}</span>}
+                            </div>
+
+                            {/* Last Name */}
+                            <div className="relative flex-1">
+                                <label className="block text-gray-300 mb-1" htmlFor="lastName">Last Name</label>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    id="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    className={`w-full px-3 py-2 bg-gray-700 text-gray-100 outline-0 border ${
+                                        errors.lastName ? 'border-red-500' : 'border-gray-600'
+                                    } rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-300 shadow-sm`}
+                                    placeholder="Last Name"
+                                    required
+                                />
+                                {errors.lastName && <span className="block text-red-500 text-sm absolute -bottom-3">{errors.lastName}</span>}
+                            </div>
+                        </div>
+
                         {/* Email */}
-                        <div className="relative pb-2">
+                        <div className="relative">
                             <label className="block text-gray-300 mb-1" htmlFor="email">Email</label>
                             <input
                                 type="email"
@@ -146,7 +191,7 @@ const SignUp = ({ onSwitchToLogin }) => {
                         </div>
 
                         {/* Password */}
-                        <div className="relative pb-2">
+                        <div className="relative">
                             <label className="block text-gray-300 mb-1" htmlFor="password">Password</label>
                             <input
                                 type="password"
@@ -164,7 +209,7 @@ const SignUp = ({ onSwitchToLogin }) => {
                         </div>
 
                         {/* Confirm Password */}
-                        <div className="relative pb-2">
+                        <div className="relative">
                             <label className="block text-gray-300 mb-1" htmlFor="confirmPassword">Confirm Password</label>
                             <input
                                 type="password"

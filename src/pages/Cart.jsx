@@ -80,11 +80,11 @@ const Cart = () => {
     return (
         <div className="bg-gray-700 font-bahnschrift py-12 min-h-screen px-4 md:px-16 lg:px-16">
             {cart.products.length > 0 ? (
-                <div className="flex flex-col md:flex-row justify-between gap-10">
+                <div className="flex flex-col md:flex-row space-x-4">
                     {/* Product List */}
                     <div className="md:w-2/3 p-5 text-white" style={{ maxHeight: "540px", overflow: "auto" }}>
                         <div className="flex justify-between items-center pb-2 px-1 text-xs font-bold">
-                            <p className="">GAMES</p>
+                            <p>GAMES</p>
                             <div className="flex space-x-10">
                                 <p>PRICE</p>
                                 <p>QUANTITY</p>
@@ -141,10 +141,7 @@ const Cart = () => {
                         <div className="space-y-2 px-1">
                             <div className="flex justify-between pb-2">
                                 <span className="font-semibold">Total items:</span>
-                                {cart.totalQuantity === 1 
-                                    ? <span className="flex items-center gap-2">{cart.totalQuantity}</span>
-                                    : <span className="flex items-center gap-2">{cart.totalQuantity}</span> 
-                                }
+                                <span className="flex items-center gap-2">{cart.totalQuantity}</span>
                             </div>
                             <div className="flex justify-between pb-2">
                                 <p className="font-semibold">Shipping Cost:</p>

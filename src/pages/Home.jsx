@@ -63,11 +63,10 @@ const Home = () => {
                 </div>
             )}
 
-
-            <div className="container mx-auto py-6 flex flex-col md:flex-row space-x-2">
+            <div className="container mx-auto py-6 flex flex-col md:flex-row md:space-x-6">
                 {/* Sidebar for game categories */}
                 <div className="w-full md:w-3/12">
-                    <div className="bg-indigo-600 text-white text-sm font-bold px-2 py-2.5" style={{
+                    <div className="bg-indigo-600 text-white text-sm md:text-base font-bold px-2 py-2.5" style={{
                         borderTopRightRadius: "3px",
                         borderTopLeftRadius: "3px"
                     }}>
@@ -80,7 +79,7 @@ const Home = () => {
                         {Categories.map((category, index) => (
                             <li
                                 key={index}
-                                className="hover:bg-indigo-600 py-2 px-4 transition duration-300 cursor-pointer"
+                                className="hover:bg-indigo-600 py-2 px-4 transition duration-300 cursor-pointer text-sm md:text-base"
                                 onClick={() => handleCategoryClick(category)}
                             >
                                 {category}
@@ -96,9 +95,6 @@ const Home = () => {
                         alt="Intro to ArKade" 
                         className="h-4/5 w-full shadow-lg object-cover rounded" 
                     />
-                    
-                    {/* Overlay */}
-                    <div className="h-4/5 absolute inset-0 bg-black bg-opacity-70 rounded"></div>
                 </div>
             </div>
 

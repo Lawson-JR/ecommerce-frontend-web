@@ -49,21 +49,18 @@ const Navbar = () => {
         setIsModalOpen(false); // Close the modal
     };
 
-    // Function to handle logout with confirmation
     const handleLogout = () => {
-        const confirmLogout = window.confirm("Are you sure you want to log out?"); // Ask for confirmation
+        const confirmLogout = window.confirm("Are you sure you want to log out?");
         if (confirmLogout) {
-            localStorage.removeItem('currentUser'); // Remove current user details
-            localStorage.removeItem('sessionStart'); // Optionally remove session start time
-            setUserName(null); // Reset username state
-            alert('You have been logged out.'); // Alert user
-            navigate('/cart'); // Navigate to cart
-    
-            // Set a timeout to navigate to home page after a short delay
+            localStorage.removeItem('currentUser'); 
+            localStorage.removeItem('currentUserEmail');
+            setUserName(null); 
+            alert('You have been logged out.'); 
+            navigate('/cart');
             setTimeout(() => {
-                navigate('/'); // Navigate to home page
+                navigate('/'); 
+                window.location.reload(); 
             }, 50);
-            window.location.reload();
         }
     };
 

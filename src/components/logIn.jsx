@@ -20,28 +20,29 @@ const LogIn = ({ setUserName, setIsModalOpen }) => { // Change here
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        const identifier = e.target.identifier.value;
+        const identifier = e.target.identifier.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
         const password = e.target.password.value;
-
+    
         let userDetails = JSON.parse(localStorage.getItem('users')) || []; // Use the same key as in SignUp
-
+    
         const currentUser = userDetails.find(user =>
-            (user.email === identifier || user.username === identifier) && user.password === password
+            (user.email.toLowerCase() === identifier || user.username.toLowerCase() === identifier) && user.password === password
         );
-
+    
         if (!currentUser) {
             setLoginError('Invalid email/username or password. Please try again.');
             return;
         }
-
+    
         // Update userName and close modal
         setUserName(currentUser.username); // Change here to update username
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
+    
         closeModal(); // Close the modal
         navigate('/cart'); // Navigate to the profile page
         setTimeout(() => {
             navigate('/profile'); // Navigate to home page
+            window.location.reload(); // Reload the page to reflect the changes
         }, 300);
     };
 

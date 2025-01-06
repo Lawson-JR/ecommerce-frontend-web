@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import profilePic from "../assets/images/user.png";
+import maleImage from "../assets/images/avatar-male.png";
+import femaleImage from "../assets/images/avatar-female.png";
 import { FaArrowAltCircleRight, FaPlus, FaTrashAlt } from "react-icons/fa";
 
 const Profile = ({ setCurrentUser }) => {
@@ -12,24 +14,59 @@ const Profile = ({ setCurrentUser }) => {
     const [newUsername, setNewUsername] = useState(''); 
     const [editingPassword, setEditingPassword] = useState(false); 
     const [newPassword, setNewPassword] = useState(''); 
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [profileImage, setProfileImage] = useState(profilePic);
 
     useEffect(() => {
-        const storedUserDetails = JSON.parse(localStorage.getItem('currentUser'));
+        const storedUserDetails = JSON.parse(localStorage.getItem("currentUser"));
         if (storedUserDetails) {
-            setUserDetails(storedUserDetails); 
-            setFavoriteGames(storedUserDetails.favoriteGames || []); 
+            setUserDetails(storedUserDetails);
+            setFavoriteGames(storedUserDetails.favoriteGames || []);
+            setProfileImage(storedUserDetails.profile?.profileImage || profilePic); // Access profileImage correctly
             setNewUsername(storedUserDetails.username); 
         } else {
-            alert('You must be logged in to view this page.');
-            navigate('/'); 
+            alert("You must be logged in to view this page.");
+            navigate("/"); // Redirect to login page if no user is found
         }
-    }, [navigate]);
+    }, [navigate]);     
 
+    const handleImageSelection = (image) => {
+        setProfileImage(image); // Update the profile image in state
+        setPopupVisible(false); // Close the popup
+    
+        // Update the profile in the user object
+        const updatedUserDetails = { 
+            ...userDetails, 
+            profile: {
+                ...userDetails.profile, 
+                profileImage: image // Update the profileImage
+            }
+        };
+    
+        // Update the users list in localStorage
+        const usersList = JSON.parse(localStorage.getItem('users')) || [];
+        const updatedUsersList = usersList.map(user => {
+            if (user.email === userDetails.email) {
+                return { 
+                    ...user, 
+                    profile: { 
+                        ...user.profile, 
+                        profileImage: image // Correctly update profile image for this user
+                    }
+                };
+            }
+            return user;
+        });
+    
+        localStorage.setItem('users', JSON.stringify(updatedUsersList)); // Save updated users list to localStorage
+        localStorage.setItem('currentUser', JSON.stringify(updatedUserDetails)); // Save updated user details to localStorage
+        setUserDetails(updatedUserDetails); // Update the userDetails state
+    };
+         
     const handleLogout = () => {
         const confirmLogout = window.confirm("Are you sure you want to log out?");
         if (confirmLogout) {
-            localStorage.removeItem('currentUser'); 
-            localStorage.removeItem('currentUserEmail');
+            localStorage.removeItem('currentUser');
             setCurrentUser(null); 
             alert('You have been logged out.'); 
             navigate('/cart');
@@ -151,9 +188,10 @@ const Profile = ({ setCurrentUser }) => {
                         <div>
                             <div className="flex items-center mb-4">
                                 <img 
-                                    src={profilePic} 
+                                    src={profileImage} 
                                     alt="Profile" 
                                     className="rounded-full border-2 border-indigo-400 mr-4 w-20"
+                                    onClick={() => setPopupVisible(true)}
                                 />
                                 <div>
                                     <p className="mb-2">Username: <span className="font-semibold">{userDetails.username}</span></p>
@@ -292,6 +330,33 @@ const Profile = ({ setCurrentUser }) => {
                     </ul>
                 </div>
             </div>
+            {popupVisible && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                        <h2 className="text-lg font-bold mb-4 text-center">Choose a Profile Image</h2>
+                        <div className="flex space-x-4 justify-center">
+                            <img
+                                src={maleImage}
+                                alt="Male"
+                                className="w-20 h-20 rounded-full cursor-pointer hover:opacity-80"
+                                onClick={() => handleImageSelection(maleImage)}
+                            />
+                            <img
+                                src={femaleImage}
+                                alt="Female"
+                                className="w-20 h-20 rounded-full cursor-pointer hover:opacity-80"
+                                onClick={() => handleImageSelection(femaleImage)}
+                            />
+                        </div>
+                        <button
+                            className="mt-4 w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 transition duration-300"
+                            onClick={() => setPopupVisible(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
