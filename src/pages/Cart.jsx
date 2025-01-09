@@ -10,23 +10,23 @@ const Cart = () => {
     
     // Load the user's cart from localStorage on component mount
     useEffect(() => {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const tempCart = JSON.parse(localStorage.getItem('tempCart')) || { products: [], totalQuantity: 0, totalPrice: 0 };
-
-        if (currentUser) {
-            // If user is logged in, find their cart in the users array
-            const userCart = users.find(user => user.username === currentUser.username)?.cartDetails?.cart || {
-                products: [],
-                totalQuantity: 0,
-                totalPrice: 0,
-            };
-            dispatch(hydrateCart(userCart));
-        } else {
-            // If no user is logged in, initialize cart state with tempCart
-            dispatch(hydrateCart(tempCart));
+        if (cart.products.length === 0) { // Only load from localStorage if the cart is empty
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const tempCart = JSON.parse(localStorage.getItem('tempCart')) || { products: [], totalQuantity: 0, totalPrice: 0 };
+    
+            if (currentUser) {
+                const userCart = users.find(user => user.username === currentUser.username)?.cartDetails?.cart || {
+                    products: [],
+                    totalQuantity: 0,
+                    totalPrice: 0,
+                };
+                dispatch(hydrateCart(userCart));
+            } else {
+                dispatch(hydrateCart(tempCart));
+            }
         }
-    }, [dispatch]);
+    }, [dispatch, cart.products.length]);    
     
     // Calculate the shipping date (1 week from today)
     const shippingDate = new Date();
