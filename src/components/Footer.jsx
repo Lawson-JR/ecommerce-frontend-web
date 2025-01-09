@@ -21,10 +21,10 @@ const Footer = () => {
                     <h4 className="text-lg font-semibold text-gray-100 mb-2">Quick Navigation</h4>
                     <ul className="space-y-2.5">
                         <li>
-                            <a href="/" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
+                            <Link to="/" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
                                 <FaLink className="w-5 h-4" />
                                 Home
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <Link to="/hive" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
@@ -33,16 +33,16 @@ const Footer = () => {
                             </Link>
                         </li>
                         <li>
-                            <a href="/contact" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
+                            <Link to="/contact" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
                                 <FaLink className="w-5 h-4" />
                                 Contact
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/about" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
+                            <Link to="/about" className="hover:text-indigo-400 transition duration-300 flex items-center gap-2 w-20">
                                 <FaLink className="w-5 h-4" />
                                 About
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
