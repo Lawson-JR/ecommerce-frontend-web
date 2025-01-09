@@ -255,7 +255,13 @@ const Checkout = () => {
                                     type="text" 
                                     name="zip"
                                     value={formData.zip}
-                                    onChange={handleInputChange}
+                                    onChange={(e) => {
+                                        const { value } = e.target;
+                                        // Allow only numeric values
+                                        if (/^\d*$/.test(value)) {
+                                            setFormData({ ...formData, zip: value });
+                                        }
+                                    }}
                                     className="w-full p-3 border border-gray-500 rounded focus:outline-none bg-gray-900 text-white"
                                     required
                                 />

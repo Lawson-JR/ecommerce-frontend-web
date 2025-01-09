@@ -58,7 +58,7 @@ const Hive = () => {
             <div className="relative mb-14 -mt-3">
                 <Link to="/trackOrder">
                     <FaClipboardList
-                        className="text-gray-300 cursor-pointer absolute top-1 right-32 text-2xl hover:text-gray-400 transition 0.3s" 
+                        className="text-gray-300 cursor-pointer absolute top-1 right-32 text-2xl hover:text-indigo-300 transition 0.3s" 
                     />
                 </Link>
                 <select

@@ -35,7 +35,7 @@ const LogIn = ({ setUserName, setIsModalOpen }) => {
         }));
 
         const currentUser = userDetails.find(user => 
-            (user.email === identifier || user.username === identifier)
+            (user.email.toLowerCase() === identifier.toLowerCase() || user.username === identifier)
         );
 
         if (!currentUser) {
