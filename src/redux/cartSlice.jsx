@@ -20,16 +20,29 @@ const saveCartToLocalStorage = (state, isLoggedIn) => {
     if (isLoggedIn) {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         const users = JSON.parse(localStorage.getItem("users")) || [];
+        
         if (currentUser) {
-            // Find the user and update their cartDetails
-            const userIndex = users.findIndex((user) => user.username === currentUser.username);
+            // Normalize the current user's username to lowercase for case-insensitive comparison
+            const currentUserUsername = currentUser.username.toLowerCase();
+            
+            // Find the user in the users array by lowercase username
+            const userIndex = users.findIndex((user) => user.username.toLowerCase() === currentUserUsername);
+            
             if (userIndex !== -1) {
-                users[userIndex].cartDetails = { cart: state }; // Save unique cart details
-                localStorage.setItem("users", JSON.stringify(users)); // Save updated users back to localStorage
+                // Update the user's cartDetails inside the user object
+                users[userIndex].cartDetails = {
+                    products: state.products,
+                    totalQuantity: state.totalQuantity,
+                    totalPrice: state.totalPrice
+                };
+                // Save the updated users array back to localStorage
+                localStorage.setItem("users", JSON.stringify(users));
+            } else {
+                console.error("User not found in users array");
             }
         }
     } else {
-        // If not logged in, save to tempCart
+        // If not logged in, save the cart to tempCart
         localStorage.setItem("tempCart", JSON.stringify(state));
     }
 };

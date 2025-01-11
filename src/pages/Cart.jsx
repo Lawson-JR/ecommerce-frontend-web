@@ -8,7 +8,6 @@ const Cart = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
     
-    // Load the user's cart from localStorage on component mount
     useEffect(() => {
         if (cart.products.length === 0) { // Only load from localStorage if the cart is empty
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -16,18 +15,31 @@ const Cart = () => {
             const tempCart = JSON.parse(localStorage.getItem('tempCart')) || { products: [], totalQuantity: 0, totalPrice: 0 };
     
             if (currentUser) {
-                const userCart = users.find(user => user.username === currentUser.username)?.cartDetails?.cart || {
-                    products: [],
-                    totalQuantity: 0,
-                    totalPrice: 0,
-                };
-                dispatch(hydrateCart(userCart));
+                // Normalize the current user's username to lowercase for case-insensitive comparison
+                const currentUserUsername = currentUser.username.toLowerCase();
+                
+                // Find the user in the users array by username (case-insensitive comparison)
+                const user = users.find(user => user.username.toLowerCase() === currentUserUsername);
+                
+                if (user) {
+                    // If user is found, retrieve their cart details (ensure cartDetails exists)
+                    const userCart = user.cartDetails || {
+                        products: [],
+                        totalQuantity: 0,
+                        totalPrice: 0,
+                    };
+                    dispatch(hydrateCart(userCart)); // Dispatch to load the user's cart
+                } else {
+                    console.error("User not found in users array.");
+                    dispatch(hydrateCart(tempCart)); // If user is not found, load tempCart
+                }
             } else {
+                // If not logged in, load the tempCart
                 dispatch(hydrateCart(tempCart));
             }
         }
-    }, [dispatch, cart.products.length]);    
-    
+    }, [dispatch, cart.products.length]);
+        
     // Calculate the shipping date (1 week from today)
     const shippingDate = new Date();
     shippingDate.setDate(shippingDate.getDate() + 7);
