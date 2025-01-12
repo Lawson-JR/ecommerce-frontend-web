@@ -19,21 +19,6 @@ const Confirmation = () => {
     const shippingCost = totalQuantity * 5;
     const grandTotal = totalAmount + shippingCost;
 
-    useEffect(() => {
-        // Fetch user email from localStorage
-        const currentUser = localStorage.getItem("currentUser");
-        if (currentUser) {
-            try {
-                const parsedUser = JSON.parse(currentUser);
-                if (parsedUser.email) {
-                    setEmail(parsedUser.email);
-                }
-            } catch (error) {
-                console.error("Error parsing currentUser from localStorage:", error);
-            }
-        }
-    }, []);
-
     const saveOrder = (orderDetails) => {
         const orderDate = new Date();
         const deliveryDate = new Date(orderDate);
@@ -70,30 +55,31 @@ const Confirmation = () => {
             shippingCost,
             grandTotal,
         };
-
+    
         saveOrder(orderDetails);
-
+    
         // Prepare email details
         const emailMessage = `
             Order Confirmation
             -------------------
             Name: ${formData?.firstName} ${formData?.lastName}
-            Email: ${email}
+            Email: ${formData?.email}
             Total Quantity: ${totalQuantity}
             Grand Total: $${grandTotal.toFixed(2)}
-
+    
             Shipping Address:
             ${formData?.address}, ${formData?.city}, ${formData?.state}, ${formData?.zip}
         `;
-
+    
+        // Send email using Formspree
         handleSubmit({
-            email,
+            email: formData?.email,
             message: emailMessage,
         });
-
+    
         setIsModalOpen(true);
         dispatch(clearCart());
-    };
+    };    
 
     if (state.succeeded) {
         console.log("Email sent successfully!");
