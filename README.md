@@ -30,7 +30,7 @@ This is a **game eCommerce frontend app** built with **React**, **Redux**, **Tai
    npm run dev
 
 ## Url / Address
-Feel free to open the [arkade](https://arkade101.netlify.app)
+Feel free to open the [Arkade](https://arkade101.netlify.app)
 
 ## Usage
 - **Browse Games**: On the home page, view the available games. Use the search bar, filters, and sorting to find specific games.
