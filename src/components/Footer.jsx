@@ -57,7 +57,7 @@ const Footer = () => {
                         <a href="https://github.com/Lawson-JR" target="_blank" className="hover:text-indigo-400 transition duration-300">
                             <FaGithub size={24} />
                         </a>
-                        <a href="https://docs.google.com/presentation/d/17qyPVCzxtGsOxNg1qufGMfSXL5yHhzErH7Kl1eAXhQU/edit?usp=sharing" target="_blank" className="hover:text-indigo-400 transition duration-300">
+                        <a href="https://drive.google.com/file/d/1SjFhNGWWl1m5M6lkOBvioM06_0DMZVZN/view?usp=drive_link" target="_blank" className="hover:text-indigo-400 transition duration-300">
                             <FaVideo size={24} />
                         </a>
                         <a href="/" target="_blank" className="hover:text-indigo-400 transition duration-300">
