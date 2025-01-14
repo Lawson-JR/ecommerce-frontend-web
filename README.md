@@ -41,7 +41,7 @@ Feel free to open the [Arkade](https://arkade101.netlify.app)
 
 ## Project Presentation
 - You can view the slides presentation on [Google Slides: Project Presentation](https://docs.google.com/presentation/d/17qyPVCzxtGsOxNg1qufGMfSXL5yHhzErH7Kl1eAXhQU/edit?usp=sharing)
-- You can view the [video demo presentation](https://drive.google.com/file/d/1SjFhNGWWl1m5M6lkOBvioM06_0DMZVZN/view?usp=drive_link)
+- You can view the [video demo presentation](https://drive.google.com/file/d/1v8UNGHyBSMygVgLORMmoQzaKJcepP_SL/view?usp=drive_link)
 
 ## Future Improvements
 - **Backend Integration**: Add a backend for secure user authentication, order processing, and dynamic content.
